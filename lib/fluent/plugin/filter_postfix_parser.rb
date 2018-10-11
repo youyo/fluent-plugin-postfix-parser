@@ -81,9 +81,8 @@ module Fluent
         return new_es
 
       rescue => e
-        log.warn "failed to parse a postfix log: #{line}", :error_class => e.class, :error => e.message
+        log.warn "failed to parse a postfix log", :error_class => e.class, :error => e.message
         log.warn_backtrace
-        record
       end
 
       def parse(text)
