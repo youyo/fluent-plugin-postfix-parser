@@ -107,7 +107,7 @@ module Fluent
         reg          = "#{time_reg} #{hostname_reg} #{process_reg}(?::\s)#{queue_id_reg}?(?:: )?#{messages}"
 
         result = text.scan(/#{reg}/)[0]
-        return {
+        response = {
           time: result[0],
           hostname: result[1],
           process: result[2],
@@ -132,6 +132,13 @@ module Fluent
           status: result[21],
           comment: result[22]
         }
+
+        response[:size] = response[:size].to_i if response[:size] != nil
+        response[:nrcpt] = response[:nrcpt].to_i if response[:nrcpt] != nil
+        response[:relay_port] = response[:relay_port].to_i if response[:relay_port] != nil
+        response[:delay] = response[:delay].to_f if response[:delay] != nil
+
+        return response
 
       end
 
