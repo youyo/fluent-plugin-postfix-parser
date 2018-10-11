@@ -75,7 +75,11 @@ module Fluent
             })
           end
 
-          new_es.add(time, @data[parsed[:queue_id]]) if parsed[:messages] == "removed"
+          if parsed[:messages] == "removed"
+            sleep 0.5
+            new_es.add(time, @data[parsed[:queue_id]])
+            @data.delete(parsed[:queue_id])
+          end
         }
 
         return new_es
