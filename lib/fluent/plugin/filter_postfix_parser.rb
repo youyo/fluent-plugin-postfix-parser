@@ -87,15 +87,16 @@ module Fluent
       def parse(text)
         client_reg     = '(?:client=(.+)\[(.+)\])'
         message_id_reg = '(?:message-id=<(.+)>)'
-        from_reg       = '(?:from=<(.+@.+)>, size=(\d*), nrcpt=(\d+) \((.*)\))'
-        to_reg         = '(?:to=<(.+@.+)>, )'
-        relay_reg      = '(?:relay=(.+)\[(.+)\]:(\d{1,2}), )'
+        from_reg       = '(?:from=<([a-zA-z0-9\.-_@]+)>, size=(\d*), nrcpt=(\d+) \((.*)\))'
+        to_reg         = '(?:to=<([a-zA-z0-9\.-_@]+)>, )'
+        orig_to_reg    = '(?:orig_to=<([a-zA-z0-9\.-_@]+)>, )'
+        relay_reg      = '(?:relay=((.+)\[(.+)\]:(\d{1,2})|virtual|local|none), )'
         delay_reg      = '(?:delay=([\d\.]+), )'
         delays_reg     = '(?:delays=([\d\.\/]*), )'
         dsn_reg        = '(?:dsn=([\d\.]+), )'
         status_reg     = '(?:status=([a-z]+) )'
         comment_reg    = '(?:\((.*)\))'
-        messages       = "(#{client_reg}?#{message_id_reg}?#{from_reg}?#{to_reg}?#{relay_reg}?#{delay_reg}?#{delays_reg}?#{dsn_reg}?#{status_reg}?#{comment_reg}?.*)"
+        messages       = "(#{client_reg}?#{message_id_reg}?#{from_reg}?#{to_reg}?#{orig_to_reg}?#{relay_reg}?#{delay_reg}?#{delays_reg}?#{dsn_reg}?#{status_reg}?#{comment_reg}?.*)"
 
         time_reg     = '([A-Za-z]{3}\s+[0-9]{1,2} [0-9]{2}:[0-9]{2}:[0-9]{2})'
         hostname_reg = '([0-9A-Za-z\.]*)'
@@ -118,14 +119,16 @@ module Fluent
           nrcpt: result[10],
           queue_status: result[11],
           to: result[12],
-          relay_hostname: result[13],
-          relay_ip: result[14],
-          relay_port: result[15],
-          delay: result[16],
-          delays: result[17],
-          dsn: result[18],
-          status: result[19],
-          comment: result[20]
+          orig_to: result[13],
+          relay: result[14],
+          relay_hostname: result[15],
+          relay_ip: result[16],
+          relay_port: result[17],
+          delay: result[18],
+          delays: result[19],
+          dsn: result[20],
+          status: result[21],
+          comment: result[22]
         }
 
       end

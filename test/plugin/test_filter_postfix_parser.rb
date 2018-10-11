@@ -26,6 +26,8 @@ class PostfixParserFilterTest < Test::Unit::TestCase
       nrcpt: nil,
       queue_status: nil,
       to: nil,
+      orig_to: nil,
+      relay: nil,
       relay_hostname: nil,
       relay_ip: nil,
       relay_port: nil,
@@ -51,6 +53,8 @@ class PostfixParserFilterTest < Test::Unit::TestCase
       nrcpt: nil,
       queue_status: nil,
       to: nil,
+      orig_to: nil,
+      relay: nil,
       relay_hostname: nil,
       relay_ip: nil,
       relay_port: nil,
@@ -76,6 +80,8 @@ class PostfixParserFilterTest < Test::Unit::TestCase
       nrcpt: "1",
       queue_status: "queue active",
       to: nil,
+      orig_to: nil,
+      relay: nil,
       relay_hostname: nil,
       relay_ip: nil,
       relay_port: nil,
@@ -101,6 +107,8 @@ class PostfixParserFilterTest < Test::Unit::TestCase
       nrcpt: nil,
       queue_status: nil,
       to: "test@example.ddd",
+      orig_to: nil,
+      relay: "example.ddd[192.168.0.30]:25",
       relay_hostname: "example.ddd",
       relay_ip: "192.168.0.30",
       relay_port: "25",
@@ -111,6 +119,59 @@ class PostfixParserFilterTest < Test::Unit::TestCase
       comment: "250 2.0.0 OK 1539154772 az9-v6si5976496plb.190 - gsmtp"
     }}
 
+    result = filter.parse('Oct 10 15:59:32 mail postfix/smtp[1874]: C6E0DDB74006: to=<test@example.ddd>, relay=virtual, delay=3.4, delays=0.11/0/0.38/2.9, dsn=2.0.0, status=sent (delivered to maildir)')
+    assert { result == {
+      time: "Oct 10 15:59:32",
+      hostname: "mail",
+      process: "postfix/smtp[1874]",
+      queue_id: "C6E0DDB74006",
+      messages: "to=<test@example.ddd>, relay=virtual, delay=3.4, delays=0.11/0/0.38/2.9, dsn=2.0.0, status=sent (delivered to maildir)",
+      client_hostname: nil,
+      client_ip: nil,
+      message_id: nil,
+      from: nil,
+      size: nil,
+      nrcpt: nil,
+      queue_status: nil,
+      to: "test@example.ddd",
+      orig_to: nil,
+      relay: "virtual",
+      relay_hostname: nil,
+      relay_ip: nil,
+      relay_port: nil,
+      delay: "3.4",
+      delays: "0.11/0/0.38/2.9",
+      dsn: "2.0.0",
+      status: "sent",
+      comment: "delivered to maildir"
+    }}
+
+    result = filter.parse('Oct 10 15:59:32 mail postfix/smtp[1874]: C6E0DDB74006: to=<test@example.ddd>, orig_to=<root>, relay=local, delay=3.4, delays=0.11/0/0.38/2.9, dsn=2.0.0, status=sent (delivered to maildir)')
+    assert { result == {
+      time: "Oct 10 15:59:32",
+      hostname: "mail",
+      process: "postfix/smtp[1874]",
+      queue_id: "C6E0DDB74006",
+      messages: "to=<test@example.ddd>, orig_to=<root>, relay=local, delay=3.4, delays=0.11/0/0.38/2.9, dsn=2.0.0, status=sent (delivered to maildir)",
+      client_hostname: nil,
+      client_ip: nil,
+      message_id: nil,
+      from: nil,
+      size: nil,
+      nrcpt: nil,
+      queue_status: nil,
+      to: "test@example.ddd",
+      orig_to: "root",
+      relay: "local",
+      relay_hostname: nil,
+      relay_ip: nil,
+      relay_port: nil,
+      delay: "3.4",
+      delays: "0.11/0/0.38/2.9",
+      dsn: "2.0.0",
+      status: "sent",
+      comment: "delivered to maildir"
+    }}
 
     result = filter.parse('Oct 10 15:59:32 mail postfix/qmgr[18719]: C6E0DDB74006: removed')
     assert { result == {
@@ -127,6 +188,8 @@ class PostfixParserFilterTest < Test::Unit::TestCase
       nrcpt: nil,
       queue_status: nil,
       to: nil,
+      orig_to: nil,
+      relay: nil,
       relay_hostname: nil,
       relay_ip: nil,
       relay_port: nil,
@@ -136,7 +199,6 @@ class PostfixParserFilterTest < Test::Unit::TestCase
       status: nil,
       comment: nil
     }}
-
 
   end
 
