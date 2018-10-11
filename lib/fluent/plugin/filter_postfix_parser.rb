@@ -86,24 +86,24 @@ module Fluent
       end
 
       def parse(text)
-        client_reg     = '(?:client=(.+)\[(.+)\])'
-        message_id_reg = '(?:message-id=<(.+)>)'
-        from_reg       = '(?:from=<([a-zA-z0-9\.-_@]+)>, size=(\d*), nrcpt=(\d+) \((.*)\))'
-        to_reg         = '(?:to=<([a-zA-z0-9\.-_@]+)>, )'
-        orig_to_reg    = '(?:orig_to=<([a-zA-z0-9\.-_@]+)>, )'
+        client_reg     = '(?:client=([a-zA-z0-9\.-]+)\[([0-9\.]+)\])'
+        message_id_reg = '(?:message-id=<([\w\d\.@_-]+)>)'
+        from_reg       = '(?:from=<([\w\d\.-_@]+)>, size=(\d+), nrcpt=(\d+) \((.*)\))'
+        to_reg         = '(?:to=<([\w\d\.-_@]+)>, )'
+        orig_to_reg    = '(?:orig_to=<([\w\d\.-_@]+)>, )'
         relay_reg      = '(?:relay=((.+)\[(.+)\]:(\d{1,2})|virtual|local|none), )'
         delay_reg      = '(?:delay=([\d\.]+), )'
-        delays_reg     = '(?:delays=([\d\.\/]*), )'
+        delays_reg     = '(?:delays=([\d\.\/]+), )'
         dsn_reg        = '(?:dsn=([\d\.]+), )'
         status_reg     = '(?:status=([a-z]+) )'
         comment_reg    = '(?:\((.*)\))'
         messages       = "(#{client_reg}?#{message_id_reg}?#{from_reg}?#{to_reg}?#{orig_to_reg}?#{relay_reg}?#{delay_reg}?#{delays_reg}?#{dsn_reg}?#{status_reg}?#{comment_reg}?.*)"
 
-        time_reg     = '([A-Za-z]{3}\s+[0-9]{1,2} [0-9]{2}:[0-9]{2}:[0-9]{2})'
-        hostname_reg = '([0-9A-Za-z\.]*)'
-        process_reg  = '(postfix\/[a-z]*\[[0-9]{1,5}\])'
-        queue_id_reg = '([0-9A-Z]*)'
-        reg          = "#{time_reg} #{hostname_reg} #{process_reg}(?::\s)#{queue_id_reg}?(?:: )?#{messages}"
+        time_reg     = '([A-Za-z]{3}\s+\d{1,2}\s\d{2}:\d{2}:\d{2})'
+        hostname_reg = '([\w\d\.]+)'
+        process_reg  = '(postfix\/\w+\[\d{1,5}\])'
+        queue_id_reg = '([0-9A-Z]+)'
+        reg          = "#{time_reg} #{hostname_reg} #{process_reg}(?::\s)#{queue_id_reg}?(?::\s)?#{messages}"
 
         result = text.scan(/#{reg}/)[0]
         response = {
