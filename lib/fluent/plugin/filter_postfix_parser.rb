@@ -14,7 +14,6 @@
 # limitations under the License.
 
 require "fluent/plugin/filter"
-require 'pp'
 
 module Fluent
   module Plugin
@@ -27,65 +26,6 @@ module Fluent
         super
         @data = {}
       end
-
-=begin
-      def filter(tag, time, record)
-        line = record[@key]
-        return record unless line
-
-        parsed = parse(line)
-
-        if parsed[:client_hostname]
-          @data[parsed[:queue_id]] = {
-            time: parsed[:time],
-            hostname: parsed[:hostname],
-            process: parsed[:process],
-            queue_id: parsed[:queue_id],
-            client_hostname: parsed[:client_hostname],
-            client_ip: parsed[:client_ip],
-            messages: []
-          }
-        end
-
-        if parsed[:message_id]
-          @data[parsed[:queue_id]][:message_id] = parsed[:message_id]
-        end
-
-        if parsed[:from]
-          @data[parsed[:queue_id]][:from] = parsed[:from]
-          @data[parsed[:queue_id]][:size] = parsed[:size]
-          @data[parsed[:queue_id]][:nrcpt] = parsed[:nrcpt]
-          @data[parsed[:queue_id]][:queue_status] = parsed[:queue_status]
-        end
-
-        if parsed[:to]
-          @data[parsed[:queue_id]][:messages].push({
-            time: parsed[:time],
-            to: parsed[:to],
-            relay_hostname: parsed[:relay_hostname],
-            relay_ip: parsed[:relay_ip],
-            relay_port: parsed[:relay_port],
-            delay: parsed[:delay],
-            delays: parsed[:delays],
-            dsn: parsed[:dsn],
-            status: parsed[:status],
-            comment: parsed[:comment],
-          })
-        end
-
-        if parsed[:messages] == "removed"
-          pp @data
-          return @data[:queue_id]
-        end
-
-        return nil
-
-      rescue => e
-        log.warn "failed to parse a postfix log: #{line}", :error_class => e.class, :error => e.message
-        log.warn_backtrace
-        record
-      end
-=end
 
       def filter_stream(tag, es)
         new_es = MultiEventStream.new
@@ -144,7 +84,6 @@ module Fluent
         record
       end
 
-      private
       def parse(text)
         client_reg     = '(?:client=(.+)\[(.+)\])'
         message_id_reg = '(?:message-id=<(.+)>)'

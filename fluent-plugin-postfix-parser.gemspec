@@ -7,9 +7,9 @@ Gem::Specification.new do |spec|
   spec.authors = ["youyo"]
   spec.email   = ["1003ni2@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{This is fluentd filter plugin for postfix logs}
+  spec.description   = %q{This is fluentd filter plugin. Parse postfix logs, multi lines become a one line log.}
+  spec.homepage      = "https://github.com/youyo/fluent-plugin-postfix-parser"
   spec.license       = "Apache-2.0"
 
   test_files, files  = `git ls-files -z`.split("\x0").partition do |f|
