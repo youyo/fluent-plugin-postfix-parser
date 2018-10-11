@@ -89,11 +89,11 @@ module Fluent
       end
 
       def parse(text)
-        client_reg     = '(?:client=([a-zA-z0-9\.-]+)\[([0-9\.]+)\])'
-        message_id_reg = '(?:message-id=<([\w\d\.@_-]+)>)'
-        from_reg       = '(?:from=<([\w\d\.-_@]+)>, size=(\d+), nrcpt=(\d+) \((.*)\))'
-        to_reg         = '(?:to=<([\w\d\.-_@]+)>, )'
-        orig_to_reg    = '(?:orig_to=<([\w\d\.-_@]+)>, )'
+        client_reg     = '(?:client=([a-zA-z0-9\.\-]+)\[([0-9\.]+)\])'
+        message_id_reg = '(?:message-id=<([\w\d\.@\-]+)>)'
+        from_reg       = '(?:from=<([\w\d\.\-\+\=\@\/\*\!\#\$\'\?\^\{\}\|]+)>, size=(\d+), nrcpt=(\d+) \((.*)\))'
+        to_reg         = '(?:to=<([\w\d\.\-\+\=\@\/\*\!\#\$\'\?\^\{\}\|]+)>, )'
+        orig_to_reg    = '(?:orig_to=<([\w\d\.\-\+\=\@\/\*\!\#\$\'\?\^\{\}\|]+)>, )'
         relay_reg      = '(?:relay=((.+)\[(.+)\]:(\d{1,2})|virtual|local|none), )'
         delay_reg      = '(?:delay=([\d\.]+), )'
         delays_reg     = '(?:delays=([\d\.\/]+), )'

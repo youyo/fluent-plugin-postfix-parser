@@ -65,17 +65,17 @@ class PostfixParserFilterTest < Test::Unit::TestCase
       comment: nil
     }}
 
-    result = filter.parse('Oct 10 15:59:28 mail postfix/qmgr[18719]: C6E0DDB74006: from=<test@example.com>, size=309891, nrcpt=1 (queue active)')
+    result = filter.parse('Oct 10 15:59:28 mail postfix/qmgr[18719]: C6E0DDB74006: from=<t_e-s+t=@example.com>, size=309891, nrcpt=1 (queue active)')
     assert { result == {
       time: "Oct 10 15:59:28",
       hostname: "mail",
       process: "postfix/qmgr[18719]",
       queue_id: "C6E0DDB74006",
-      messages: "from=<test@example.com>, size=309891, nrcpt=1 (queue active)",
+      messages: "from=<t_e-s+t=@example.com>, size=309891, nrcpt=1 (queue active)",
       client_hostname: nil,
       client_ip: nil,
       message_id: nil,
-      from: "test@example.com",
+      from: "t_e-s+t=@example.com",
       size: 309891,
       nrcpt: 1,
       queue_status: "queue active",
@@ -119,13 +119,13 @@ class PostfixParserFilterTest < Test::Unit::TestCase
       comment: "250 2.0.0 OK 1539154772 az9-v6si5976496plb.190 - gsmtp"
     }}
 
-    result = filter.parse('Oct 10 15:59:32 mail postfix/smtp[1874]: C6E0DDB74006: to=<test@example.ddd>, relay=virtual, delay=3.4, delays=0.11/0/0.38/2.9, dsn=2.0.0, status=sent (delivered to maildir)')
+    result = filter.parse('Oct 10 15:59:32 mail postfix/smtp[1874]: C6E0DDB74006: to=<test@ex-ample.ddd>, relay=virtual, delay=3.4, delays=0.11/0/0.38/2.9, dsn=2.0.0, status=sent (delivered to maildir)')
     assert { result == {
       time: "Oct 10 15:59:32",
       hostname: "mail",
       process: "postfix/smtp[1874]",
       queue_id: "C6E0DDB74006",
-      messages: "to=<test@example.ddd>, relay=virtual, delay=3.4, delays=0.11/0/0.38/2.9, dsn=2.0.0, status=sent (delivered to maildir)",
+      messages: "to=<test@ex-ample.ddd>, relay=virtual, delay=3.4, delays=0.11/0/0.38/2.9, dsn=2.0.0, status=sent (delivered to maildir)",
       client_hostname: nil,
       client_ip: nil,
       message_id: nil,
@@ -133,7 +133,7 @@ class PostfixParserFilterTest < Test::Unit::TestCase
       size: nil,
       nrcpt: nil,
       queue_status: nil,
-      to: "test@example.ddd",
+      to: "test@ex-ample.ddd",
       orig_to: nil,
       relay: "virtual",
       relay_hostname: nil,
