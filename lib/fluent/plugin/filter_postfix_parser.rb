@@ -62,6 +62,8 @@ module Fluent
             @data[parsed[:queue_id]][:messages].push({
               time: parsed[:time],
               to: parsed[:to],
+              orig_to: parsed[:orig_to],
+              relay: parsed[:relay],
               relay_hostname: parsed[:relay_hostname],
               relay_ip: parsed[:relay_ip],
               relay_port: parsed[:relay_port],
