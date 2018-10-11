@@ -35,6 +35,14 @@ $ bundle
 </source>
 
 <filter postfix.log>
+  @type grep
+  <exclude>
+    key message
+    pattern (dovecot|postfix-script)
+  </exclude>
+</filter>
+
+<filter postfix.log>
   @type postfix_parser
   # key (string) (optional) Default value: `message`.
   key message
